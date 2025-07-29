@@ -1,34 +1,10 @@
 import json
 from pathlib import Path
 from datetime import datetime
+from storage import load_books, save_books
 
 
-# Define where to store the books data
-BOOKS_FILE = Path("data/books.json")
-
-# Load the current books from the file, or create empty structure if the file doesn't exist
-def load_books():
-    if not BOOKS_FILE.exists() or BOOKS_FILE.stat().st_size == 0:
-        return {"to_read": [], "read": []}
-    with open(BOOKS_FILE, "r") as file:
-        return json.load(file)
-        
-    
-# Save the current books data to the JSON file
-def save_books(books):
-    BOOKS_FILE.parent.mkdir(parents=True, exist_ok=True)    # Makes sure 'data/' exists
-    with open(BOOKS_FILE, "w") as file:
-        json.dump(books, file, indent=4)
-
-
-# Example of how to use it 
-if __name__ == "__main__":
-    books = load_books()
-    print("Books loaded successfully.")
-    print(books)
-
-
-def add_to_read_books(title, author)
+def add_to_read_books(title, author):
     title = title.strip()
     author =  author.strip()
 
@@ -36,7 +12,7 @@ def add_to_read_books(title, author)
         print("Error: Title and author cannot be empty.")
         return
     
-    books = load_books
+    books = load_books()
 
     # Check duplicates in "to_read"
     for book in books["to_read"]:
@@ -53,3 +29,30 @@ def add_to_read_books(title, author)
     books["to_read"].append(new_book)
     save_books(books)
     print(f"Added '{title}' by {author} to your 'to read' list")
+
+
+def add_to_completed_books(title, author):
+    title = title.strip()
+    author = author.strip()
+
+    if not title or not author:
+        print("Error: Title and author cannot be empty.")
+        return
+    
+    books = load_books()
+
+    # Check duplicates in "completed"
+    for book in books["completed"]:
+        if book["title"].lower() == title.lower() and book["author"].lower() == author.lower():
+            print("This book is already in your 'completed' list.")
+            return
+        
+    # Add book with timestamp
+    new_book = {
+        "title": title,
+        "author": author,
+        "date_completed": datetime.now().isoformat()
+    }
+    books["completed"].append(new_book)
+    save_books(books)
+    print(f"Added '{title}' by {author} to your 'completed' list")
