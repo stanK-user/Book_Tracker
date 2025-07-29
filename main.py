@@ -25,7 +25,7 @@ def print_menu():
 def main():
     while True:
         print_menu()
-        choice = input("\nEnter your choice (1-3): ").strip()
+        choice = input("\nEnter your choice (1-7): ").strip()
 
         if choice == "1":
             title = input("Enter the book title: ")
@@ -39,7 +39,7 @@ def main():
 
         elif choice == "3":
             print("\nYour 'to read' list:")
-            to_read = get_to_read_books
+            to_read = get_to_read_books()
             print_books(to_read)
 
         elif choice == "4":
