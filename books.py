@@ -2,8 +2,9 @@ import json
 from pathlib import Path
 from datetime import datetime
 from storage import load_books, save_books
+from config import FILE_PATH
 
-
+# Add a book to the "to_read" list
 def add_to_read_books(title, author):
     title = title.strip()
     author =  author.strip()
@@ -31,6 +32,7 @@ def add_to_read_books(title, author):
     print(f"Added '{title}' by {author} to your 'to read' list")
 
 
+# Add book to the "completed" list
 def add_to_completed_books(title, author):
     title = title.strip()
     author = author.strip()
@@ -58,34 +60,39 @@ def add_to_completed_books(title, author):
     print(f"Added '{title}' by {author} to your 'completed' list")
 
 
-def get_to_read_books(file_path=None):
-    books = load_books(file_path)
+def get_books_by_list(list_name):
+    books = load_books()
+    return books.get(list_name, [])
+
+
+def get_to_read_books():
+    books = load_books()
     return books["to_read"]
 
-def get_completed_books(file_path=None):
-    books = load_books(file_path)
+
+def get_completed_books():
+    books = load_books()
     return books["completed"]
 
 
-def mark_book_as_completed(index, file_path=None):
-    books = load_books(file_path)
+def mark_book_as_completed(index):
+    books = load_books()
     to_read = books["to_read"]
 
     if index < 1 or index > len(to_read):
         print("Invalid book number.")
         return
 
-    book = to_read.pop(index - 1)  # remove from to_read
-
+    book = to_read.pop(index - 1)
     book["date_completed"] = datetime.now().isoformat()
     books["completed"].append(book)
 
-    save_books(books, file_path)
+    save_books(books)
     print(f"Marked '{book['title']}' by {book['author']}' as completed.")
 
 
-def remove_book(list_name, index, file_path=None):
-    books = load_books(file_path)
+def remove_book(list_name, index):
+    books = load_books()
     book_list = books[list_name]
 
     if index < 1 or index > len(book_list):
@@ -93,5 +100,5 @@ def remove_book(list_name, index, file_path=None):
         return
 
     book = book_list.pop(index - 1)
-    save_books(books, file_path)
+    save_books(books)
     print(f"Removed '{book['title']}' by {book['author']}' from '{list_name}' list.")
