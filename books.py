@@ -43,14 +43,9 @@ def mark_book_completed(title, author):
 
 def get_all_books():
     books = load_books()
-    if not books:
-        print("No books found.")
-        return
-
-    print("\nYour Books:")
-    for book in books:
-        status = "✅ Completed" if book["completed"] else "📖 To Read"
-        print(f"- {book['title']} by {book['author']} ({status})")
+    if not isinstance(books, list):
+        return []  # fallback in case of bad/corrupted data
+    return books
 
 
 def remove_book(title, author):
