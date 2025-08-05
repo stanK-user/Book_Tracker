@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Tracker</title>
+</head>
+<body>
+  <h1>📚 My Book Tracker</h1>
+
+  <form method="post" action="{{ url_for('add') }}">
+    <input name="title" placeholder="Book Title" required>
+    <input name="author" placeholder="Author" required>
+    <button type="submit">Add</button>
+  </form>
+
+  <p>
+    <a href="{{ url_for('index') }}">All</a> |
+    <a href="{{ url_for('index', filter='to_read') }}">To Read</a> |
+    <a href="{{ url_for('index', filter='completed') }}">Completed</a>
+  </p>
+
+  <ul>
+    {% if books %}
+      {% for book in books %}
+        <li>
+          <strong>{{ book.title }}</strong> by {{ book.author }}
+          {% if not book.completed %}
+            [<a href="{{ url_for('mark_completed', title=book.title, author=book.author) }}">Mark as Completed</a>]
+          {% endif %}
+          [<a href="{{ url_for('remove', title=book.title, author=book.author) }}">Remove</a>]
+        </li>
+      {% endfor %}
+    {% else %}
+      <li>No books found.</li>
+    {% endif %}
+  </ul>
+</body>
+</html>

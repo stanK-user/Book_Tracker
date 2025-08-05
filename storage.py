@@ -14,7 +14,8 @@ def load_books():
     except json.JSONDecodeError:
         print(f"Error decoding JSON from {FILE_PATH}. Returning empty list.")
         return []    
-        
+
+       
 # Save the current books data to the JSON file
 def save_books(books):
     FILE_PATH.parent.mkdir(parents=True, exist_ok=True)    # Makes sure 'data/' exists
