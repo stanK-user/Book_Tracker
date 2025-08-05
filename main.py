@@ -1,6 +1,6 @@
 # main.py
 
-from books import add_book, mark_book_completed, get_all_books
+from books import add_book, mark_book_completed, get_all_books, remove_book
 
 def main():
     while True:
@@ -8,7 +8,8 @@ def main():
         print("1. Add Book")
         print("2. Mark Book as Completed")
         print("3. View All Books")
-        print("4. Quit")
+        print("4. Remove Book")
+        print("5. Quit")
 
         choice = input("Choose an option: ").strip()
 
@@ -26,6 +27,11 @@ def main():
             get_all_books()
 
         elif choice == "4":
+            title = input("Title to remove: ")
+            author = input("Author: ")
+            remove_book(title, author)
+
+        elif choice == "5":
             print("Goodbye!")
             break
 

@@ -21,6 +21,7 @@ def add_book(title, author):
     save_books(books)
     print(f"Added: {title} by {author}")
 
+
 def mark_book_completed(title, author):
     books = load_books()
     updated = False
@@ -50,3 +51,23 @@ def get_all_books():
     for book in books:
         status = "✅ Completed" if book["completed"] else "📖 To Read"
         print(f"- {book['title']} by {book['author']} ({status})")
+
+
+def remove_book(title, author):
+    title = title.strip().lower()
+    author = author.strip().lower()
+
+    books = load_books()
+    initial_count = len(books)
+
+    # Filter out any book matching both title and author
+    books = [
+        book for book in books
+        if not (book["title"].lower() == title and book["author"].lower() == author)
+    ]
+
+    if len(books) < initial_count:
+        save_books(books)
+        print(f"Removed '{title.title()}' by {author.title()} from your list.")
+    else:
+        print(f"Book '{title.title()}' by {author.title()} not found in your list.")
