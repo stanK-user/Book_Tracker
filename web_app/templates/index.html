@@ -13,26 +13,63 @@
     <button type="submit">Add</button>
   </form>
 
-  <p>
-    <a href="{{ url_for('index') }}">All</a> |
-    <a href="{{ url_for('index', filter='to_read') }}">To Read</a> |
-    <a href="{{ url_for('index', filter='completed') }}">Completed</a>
-  </p>
+<style>
+  /* Tabs container */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 1rem;
+    background: #f8f9fa;
+  }
 
-  <ul>
-    {% if books %}
-      {% for book in books %}
-        <li>
+  /* Each tab */
+  .tab {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    margin-right: 0.5rem;
+    font-weight: bold;
+    color: #555;
+    text-decoration: none;
+  }
+
+  /* Active tab style */
+  .tab.active {
+    border-color: #007bff #007bff white;
+    color: #007bff;
+    background: white;
+  }
+
+  /* Hover effect */
+  .tab:hover {
+    color: #0056b3;
+  }
+</style>
+
+<div class="tabs">
+  <a href="{{ url_for('index') }}" class="tab {% if not filter %}active{% endif %}">All</a>
+  <a href="{{ url_for('index', filter='to_read') }}" class="tab {% if filter == 'to_read' %}active{% endif %}">To Read</a>
+  <a href="{{ url_for('index', filter='completed') }}" class="tab {% if filter == 'completed' %}active{% endif %}">Completed</a>
+</div>
+
+
+<ul>
+  {% if books %}
+    {% for book in books %}
+      <li>
+        {% if book.completed %}
+          <span style="color: green;">✅</span>
           <strong>{{ book.title }}</strong> by {{ book.author }}
-          {% if not book.completed %}
-            [<a href="{{ url_for('mark_completed', title=book.title, author=book.author) }}">Mark as Completed</a>]
-          {% endif %}
-          [<a href="{{ url_for('remove', title=book.title, author=book.author) }}">Remove</a>]
-        </li>
-      {% endfor %}
-    {% else %}
-      <li>No books found.</li>
-    {% endif %}
-  </ul>
-</body>
-</html>
+        {% else %}
+          <strong>{{ book.title }}</strong> by {{ book.author }}
+          [<a href="{{ url_for('mark_completed', title=book.title, author=book.author) }}">Mark as Completed</a>]
+        {% endif %}
+        [<a href="{{ url_for('remove', title=book.title, author=book.author) }}">Remove</a>]
+      </li>
+    {% endfor %}
+  {% else %}
+    <li>No books found.</li>
+  {% endif %}
+</ul>
+
